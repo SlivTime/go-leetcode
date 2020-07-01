@@ -1,12 +1,15 @@
 package twoSum
 
 func twoSum(nums []int, target int) []int {
+	var seen map[int]int
+	seen = make(map[int]int)
 	for i, val := range nums {
-		for j := i + 1; j < len(nums); j++ {
-			if val+nums[j] == target {
-				return []int{i, j}
-			}
+		complement := target - val
+		j, ok := seen[complement]
+		if ok {
+			return []int{j, i}
 		}
+		seen[val] = i
 	}
-	return []int{0, 0}
+	return []int{}
 }

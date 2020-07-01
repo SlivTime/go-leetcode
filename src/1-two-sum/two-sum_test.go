@@ -30,6 +30,11 @@ func Test_twoSum(t *testing.T) {
 			args{[]int{0, 4, 3, 0}, 0},
 			[]int{0, 3},
 		},
+		{
+			"no anwer",
+			args{[]int{0, 4, 3, 0}, 42},
+			[]int{},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
