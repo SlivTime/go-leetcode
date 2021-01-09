@@ -1,20 +1,29 @@
 package wordladder
 
-func wordDifference(beginWord string, endWord string) int {
+func isNeughbor(beginWord string, endWord string) bool {
 	diff := 0
 	for idx := range beginWord {
 		if beginWord[idx] != endWord[idx] {
 			diff++
 		}
 	}
-	return diff
+	return diff == 1
+}
+
+func getNeighbors(word string, wordList []string) []int {
+	var result []int
+	for idx, otherWord := range wordList {
+		if isNeughbor(word, otherWord) {
+			result = append(result, idx)
+		}
+	}
+	return result
 }
 
 func ladderLength(beginWord string, endWord string, wordList []string) int {
 	var distance int
 	var pointsToVisit []int
 
-	paths := make(map[int][]int)
 	fullList := append([]string{beginWord}, wordList...)
 	wordsLen := len(fullList)
 
@@ -25,16 +34,6 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
 		}
 	}
 	seen := make(map[int]bool, wordsLen)
-
-	// init paths and distances
-	for currIdx, currentWord := range fullList {
-		for otherIdx, otherWord := range fullList {
-			distance = wordDifference(currentWord, otherWord)
-			if distance == 1 {
-				paths[currIdx] = append(paths[currIdx], otherIdx)
-			}
-		}
-	}
 
 	for {
 		pointsToVisit = pointsToVisit[:0]
@@ -48,7 +47,7 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
 			break
 		} else {
 			for _, current := range pointsToVisit {
-				neighbors := paths[current]
+				neighbors := getNeighbors(fullList[current], fullList)
 				seen[current] = true
 				if fullList[current] == endWord {
 					return distance + 1
